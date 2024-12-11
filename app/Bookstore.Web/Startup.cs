@@ -24,6 +24,9 @@ namespace Bookstore.Web
                 logging.AddConsole();
                 logging.AddDebug();
             });
+
+            // Add any additional configuration setup here
+            services.AddSingleton(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IHostEnvironment env, ILoggerFactory loggerFactory)
@@ -31,14 +34,32 @@ namespace Bookstore.Web
             var logger = loggerFactory.CreateLogger<Startup>();
             logger.LogInformation("Application Starting");
 
-            ConfigurationSetup.ConfigureConfiguration();
-
             // DependencyInjection is now handled in ConfigureServices method
 
             // Update authentication configuration for ASP.NET Core
             AuthenticationConfig.ConfigureAuthentication(app);
 
             // Add other middleware and routing configuration here
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
+            }
+
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
         }
     }
 }
