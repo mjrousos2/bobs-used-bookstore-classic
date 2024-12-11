@@ -62,4 +62,15 @@ namespace Bookstore.Web
             });
         }
     }
+
+    public static class AuthenticationConfig
+    {
+        public static void ConfigureAuthentication(IApplicationBuilder app)
+        {
+            // Implement authentication configuration here
+            // For example:
+            // app.UseAuthentication();
+            // app.UseAuthorization();
+        }
+    }
 }
